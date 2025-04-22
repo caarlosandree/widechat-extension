@@ -129,26 +129,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     logoutSection.style.display = "none";
   }
 
-  // Login
+  // Login - Clique no botão
   document.getElementById("loginBtn").addEventListener("click", async () => {
+    await login();
+  });
+
+  // Login - Pressionar ENTER
+  document.getElementById("password").addEventListener("keypress", async (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Evita o comportamento padrão do Enter
+      await login(); // Chama a função de login
+    }
+  });
+
+  // Função de login extraída para ser reutilizada
+  async function login() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-  
+
     const loading = document.getElementById('loadingLogin');
     const statusMessage = document.getElementById('statusMessage');
     const loginForm = document.getElementById('loginForm');
     const logoutSection = document.getElementById('logoutSection');
-  
+
     // Esconde mensagens anteriores e mostra loading
     statusMessage.classList.add('hidden');
     loading.classList.remove('hidden');
-  
+
     if (!email || !password) {
       alert("Preencha todos os campos.");
       loading.classList.add('hidden');
       return;
     }
-  
+
     try {
       const response = await fetch("https://wideintelbras.widechat.com.br/api/v4/auth/login", {
         method: "POST",
@@ -161,10 +174,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
       });
       const data = await response.json();
-  
+
       if (data.token) {
         const encryptedPassword = await encrypt(password, email);
-  
+
         await chrome.storage.local.set({
           token: data.token,
           isLoggedIn: true,
@@ -176,7 +189,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         logoutSection.classList.remove('hidden');
         document.getElementById("userEmail").textContent = `Logado como: ${email}`;
         alert("Login realizado com sucesso.");
-        location.reload()
+        location.reload();
       } else {
         statusMessage.classList.remove('hidden');
         statusMessage.textContent = "Erro no login. Verifique suas credenciais.";
@@ -188,11 +201,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       statusMessage.textContent = "Erro ao conectar com o servidor.";
       alert("Erro ao conectar com o servidor.");
     }
-  
+
     // Esconde o loading após o processo
     loading.classList.add('hidden');
-
-  });
+  }
   
 
 // Função simulada de autenticação
