@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           isLoggedIn: true
         });
 
-        document.getElementById("userEmail").textContent = `Logado como: ${savedEmail}`;
+        document.getElementById("userEmail").textContent = `${savedEmail}`;
         loginForm.style.display = "none"; // Oculta o formulário de login
         logoutSection.style.display = "block"; // Exibe a seção de logout
         return;
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         loginForm.classList.add('hidden');
         logoutSection.classList.remove('hidden');
-        document.getElementById("userEmail").textContent = `Logado como: ${email}`;
+        document.getElementById("userEmail").textContent = `${email}`;
         alert("Login realizado com sucesso.");
         location.reload();
       } else {

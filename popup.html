@@ -16,7 +16,7 @@
     h3 {
       text-align: center;
       margin-bottom: 16px;
-      color: #0057b7;
+      color: #00b72e;
     }
 
     input, button {
@@ -29,7 +29,7 @@
     }
 
     button {
-      background-color: #0057b7;
+      background-color: #00b72e;
       color: white;
       border: none;
       font-weight: bold;
@@ -38,7 +38,7 @@
     }
 
     button:hover {
-      background-color: #00429c;
+      background-color: #00b72e;
     }
 
     .hidden {
@@ -87,7 +87,7 @@
   </style>
 </head>
 <body>
-  <h3>WideChat Logout</h3>
+  <h3>WideChat Agent Monitor</h3>
 
   <div id="loginForm">
     <input type="email" id="email" placeholder="E-mail" />
@@ -104,8 +104,8 @@
 
   <div id="logoutSection">
     <p>Logado como: <strong id="userEmail"></strong></p>
-    <button id="logoutBtn">Sair</button>
-    <button id="clearBtn">Limpar credenciais</button>
+    <button id="logoutBtn">Logout Manual</button>
+    <button id="clearBtn">Limpar Credenciais</button>
     <div id="loadingLogout" class="loading hidden">Deslogando...</div>
     <div id="statusMessageLogout" class="status hidden"></div>
   </div>
