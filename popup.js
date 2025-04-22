@@ -176,20 +176,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         loginForm.classList.add('hidden');
         logoutSection.classList.remove('hidden');
         alert("Login realizado com sucesso.");
+        location.reload()
       } else {
         statusMessage.classList.remove('hidden');
         statusMessage.textContent = "Erro no login. Verifique suas credenciais.";
+        alert("Erro no login. Verifique suas credenciais.");
       }
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       statusMessage.classList.remove('hidden');
       statusMessage.textContent = "Erro ao conectar com o servidor.";
+      alert("Erro ao conectar com o servidor.");
     }
   
     // Esconde o loading após o processo
     loading.classList.add('hidden');
-    location.reload()
-
+    
   });
   
 
