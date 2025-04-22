@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "WideChat Agent Monitor",
+  "version": "1.0",
+  "description": "Desloga o agente do WideChat quando a aba ou navegador é fechado.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "background"
+  ],
+  "host_permissions": [
+    "https://*.widechat.com.br/user/agent*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.widechat.com.br/user/agent*"],
+      "js": ["content.js"]
+    }
+  ]
+}
