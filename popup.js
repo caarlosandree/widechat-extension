@@ -186,6 +186,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Erro ao fazer login:", error);
       statusMessage.classList.remove('hidden');
       statusMessage.textContent = "Erro ao conectar com o servidor.";
+      alert("Erro ao conectar com o servidor.");
     }
   
     // Esconde o loading após o processo
