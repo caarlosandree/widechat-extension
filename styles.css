@@ -36,7 +36,30 @@ h3 {
   transform: translateY(0);
 }
 
-input,
+#domainInputSection {
+  margin-bottom: 10px;
+  padding: 15px;
+}
+
+#domainInputSection label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333; /* Garante que o texto seja legível no tema claro */
+}
+
+#domainInputSection input[type="text"] {
+  width: 100%;
+  padding: 10px; /* Aumentei o padding para consistência com outros inputs */
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Usei o mesmo raio dos outros inputs */
+  box-sizing: border-box;
+  font-size: 0.95em; /* Mantive o tamanho da fonte */
+  color: #333; /* Garante que o texto seja legível no tema claro */
+}
+
+input:not(#domain), /* Aplica estilos a todos os inputs, exceto o de domínio */
 button {
   width: 100%;
   margin-top: 10px;
@@ -110,4 +133,18 @@ button.secondary:hover {
   cursor: pointer;
   font-size: 1.2em; /* Aumentei o ícone para facilitar a interação */
   color: #666;
+}
+
+/* Estilos para o tema escuro */
+body.dark #domainInputSection label,
+body.dark #domainInputSection input[type="text"],
+body.dark input:not(#domain),
+body.dark button {
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+body.dark #domainInputSection input[type="text"]::placeholder {
+  color: #aaa;
 }
