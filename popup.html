@@ -4,112 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WideChat Auto Logout</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      min-width: 280px;
-      padding: 16px;
-      background-color: #f7f9fc;
-      color: #333;
-    }
-
-    h3 {
-      text-align: center;
-      margin-bottom: 16px;
-      color: #00b72e;
-    }
-
-    input, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-
-    button {
-      background-color: #00b72e;
-      color: white;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #00b72e;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    #logoutSection {
-      display: none;
-    }
-
-    .status {
-      margin-top: 10px;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 0.9em;
-    }
-
-    .status.success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .status.error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-
-    .loading {
-      text-align: center;
-      font-size: 0.9em;
-      margin-top: 10px;
-    }
-
-    .password-wrapper {
-      position: relative;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 35%;
-      cursor: pointer;
-      font-size: 0.9em;
-      color: #666;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="theme.css">
+  <script src="theme.js" defer></script>
 </head>
 <body>
-  <h3>WideChat Agent Monitor</h3>
+  <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider round"></span>
+    </label>
+    <span id="themeLabel" class="theme-icon">☀️</span>
+  </div>
+  <div class="container">
+    <h3>WideChat Agent Monitor</h3>
 
-  <div id="loginForm">
-    <input type="email" id="email" placeholder="E-mail" />
-    
-    <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Senha" />
-      <span id="togglePassword" class="toggle-password">👁️</span>
+    <div class="card" id="loginForm">
+      <input type="email" id="email" placeholder="E-mail" />
+      
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Senha" />
+        <span id="togglePassword" class="toggle-password">👁️</span>
+      </div>
+
+      <button id="loginBtn">Login</button>
+      <div id="loadingLogin" class="loading hidden">Fazendo login...</div>
+      <div id="statusMessage" class="status hidden"></div>
     </div>
-
-    <button id="loginBtn">Login</button>
-    <div id="loadingLogin" class="loading hidden">Fazendo login...</div>
-    <div id="statusMessage" class="status hidden"></div>
+    <div class="card" id="logoutSection">
+      <p>Logado como: <strong id="userEmail"></strong></p>
+      <button id="logoutBtn">Logout Manual</button>
+      <button id="clearBtn" class="secondary">Limpar Credenciais</button>
+      <div id="loadingLogout" class="loading hidden">Deslogando...</div>
+      <div id="statusMessageLogout" class="status hidden"></div>
+    </div>
   </div>
 
-  <div id="logoutSection">
-    <p>Logado como: <strong id="userEmail"></strong></p>
-    <button id="logoutBtn">Logout Manual</button>
-    <button id="clearBtn">Limpar Credenciais</button>
-    <div id="loadingLogout" class="loading hidden">Deslogando...</div>
-    <div id="statusMessageLogout" class="status hidden"></div>
-  </div>
-
-  <script src="popup.js"></script>
+  <script src="popup.js" defer></script>
 </body>
 </html>

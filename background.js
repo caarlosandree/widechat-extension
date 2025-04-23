@@ -1,27 +1,41 @@
 // 🔑 Função para obter o token de autenticação armazenado
 async function getToken() {
-  // Obtém o token armazenado localmente pelo Chrome (se houver)
   const { token } = await chrome.storage.local.get(["token"]);
-  return token; // Retorna o token encontrado
+  if (!token) {
+    console.warn("Token não encontrado.");
+    return null;
+  }
+  return token;
 }
 
 // 🚪 Função para deslogar do WideChat usando o token de autenticação
 async function logoutWideChat(token) {
-  if (token) { // Verifica se existe um token válido
+  if (token) {
     try {
-      // Faz a requisição de logout para a API do WideChat
       const response = await fetch("https://wideintelbras.widechat.com.br/api/v4/auth/logout?type=all", {
-        method: "GET", // Método GET para o logout
-        headers: { Authorization: `Bearer ${token}` } // Envia o token no cabeçalho
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (response.ok) { // Se a resposta for bem-sucedida
-        console.log("WideChat deslogado."); // Loga o sucesso
+      if (response.ok) {
+        console.log("WideChat deslogado.");
       } else {
-        console.error("Erro ao deslogar WideChat:", response.status); // Caso contrário, loga o erro
+        console.error("Erro ao deslogar WideChat:", response.status);
+        chrome.notifications.create({
+          type: "basic",
+          iconUrl: "icon.png",
+          title: "Erro ao deslogar",
+          message: "Houve um problema ao deslogar do WideChat.",
+        });
       }
     } catch (error) {
-      console.error("Erro ao deslogar WideChat:", error); // Se houver erro na requisição
+      console.error("Erro ao deslogar WideChat:", error);
+      chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icon.png",
+        title: "Erro ao deslogar",
+        message: "Falha ao tentar se desconectar do WideChat.",
+      });
     }
   }
 }

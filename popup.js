@@ -132,6 +132,8 @@ async function renewToken(email, password) {
 document.addEventListener("DOMContentLoaded", async () => {
   const loginForm = document.getElementById("loginForm"); // Formulário de login
   const logoutSection = document.getElementById("logoutSection"); // Seção de logout
+  const togglePassword = document.getElementById("togglePassword");
+  const passwordInput = document.getElementById("password");
 
   // Obtém os dados salvos no armazenamento local (email, senha criptografada e estado de login)
   const {
@@ -222,83 +224,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Função de login extraída para ser reutilizada
-  async function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+  // Função simulada de autenticação
+  async function authenticateUser(email, password) {
+    // Exemplo fictício: substitua com a autenticação real
+    const isAuthenticated = email === 'user@example.com' && password === 'password123';
 
-    const loading = document.getElementById('loadingLogin');
-    const statusMessage = document.getElementById('statusMessage');
-    const loginForm = document.getElementById('loginForm');
-    const logoutSection = document.getElementById('logoutSection');
-
-    // Esconde mensagens anteriores e mostra loading
-    statusMessage.classList.add('hidden');
-    loading.classList.remove('hidden');
-
-    if (!email || !password) {
-      alert("Preencha todos os campos.");
-      loading.classList.add('hidden');
-      return;
+    if (isAuthenticated) {
+      // Atualizar o e-mail do usuário após a autenticação
+      document.getElementById('userEmail').textContent = email;
     }
 
-    try {
-      const response = await fetch("https://wideintelbras.widechat.com.br/api/v4/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
-      });
-      const data = await response.json();
-
-      if (data.token) {
-        const encryptedPassword = await encrypt(password, email);
-
-        await chrome.storage.local.set({
-          token: data.token,
-          isLoggedIn: true,
-          savedEmail: email,
-          savedPassword: encryptedPassword
-        });
-
-        loginForm.classList.add('hidden');
-        logoutSection.classList.remove('hidden');
-        document.getElementById("userEmail").textContent = `${email}`;
-        alert("Login realizado com sucesso.");
-        location.reload();
-      } else {
-        statusMessage.classList.remove('hidden');
-        statusMessage.textContent = "Erro no login. Verifique suas credenciais.";
-        alert("Erro no login. Verifique suas credenciais.");
-      }
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      statusMessage.classList.remove('hidden');
-      statusMessage.textContent = "Erro ao conectar com o servidor.";
-      alert("Erro ao conectar com o servidor.");
-    }
-
-    // Esconde o loading após o processo
-    loading.classList.add('hidden');
+    return isAuthenticated;
   }
-  
-
-// Função simulada de autenticação
-async function authenticateUser(email, password) {
-  // Exemplo fictício: substitua com a autenticação real
-  const isAuthenticated = email === 'user@example.com' && password === 'password123';
-  
-  if (isAuthenticated) {
-    // Atualizar o e-mail do usuário após a autenticação
-    document.getElementById('userEmail').textContent = email;
-  }
-  
-  return isAuthenticated;
-}
 
   //Mostrar a Senha ao Clicar no Ícone (👁️)
   document.getElementById('togglePassword').addEventListener('click', function() {
@@ -348,4 +285,89 @@ async function authenticateUser(email, password) {
     logoutSection.style.display = "none";
     alert("Credenciais removidas.");
   });
+
+  // ✨ Animação de entrada para os cards ✨
+  document.querySelectorAll(".card").forEach((card, i) => {
+    setTimeout(() => {
+      card.classList.add("visible");
+    }, 100 * i);
+  });
 });
+
+// Função de login extraída para ser reutilizada
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const loading = document.getElementById('loadingLogin');
+  const statusMessage = document.getElementById('statusMessage');
+  const loginForm = document.getElementById('loginForm');
+  const logoutSection = document.getElementById('logoutSection');
+
+  // Esconde mensagens anteriores e mostra loading
+  statusMessage.classList.add('hidden');
+  loading.classList.remove('hidden');
+
+  if (!email || !password) {
+    alert("Preencha todos os campos.");
+    loading.classList.add('hidden');
+    return;
+  }
+
+  try {
+    const response = await fetch("https://wideintelbras.widechat.com.br/api/v4/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+    const data = await response.json();
+
+    if (data.token) {
+      const encryptedPassword = await encrypt(password, email);
+
+      await chrome.storage.local.set({
+        token: data.token,
+        isLoggedIn: true,
+        savedEmail: email,
+        savedPassword: encryptedPassword
+      });
+
+      loginForm.classList.add('hidden');
+      logoutSection.classList.remove('hidden');
+      document.getElementById("userEmail").textContent = `${email}`;
+      alert("Login realizado com sucesso.");
+      location.reload();
+    } else {
+      statusMessage.classList.remove('hidden');
+      statusMessage.textContent = "Erro no login. Verifique suas credenciais.";
+      alert("Erro no login. Verifique suas credenciais.");
+    }
+  } catch (error) {
+    console.error("Erro ao fazer login:", error);
+    statusMessage.classList.remove('hidden');
+    statusMessage.textContent = "Erro ao conectar com o servidor.";
+    alert("Erro ao conectar com o servidor.");
+  }
+
+  // Esconde o loading após o processo
+  loading.classList.add('hidden');
+}
+
+
+// Função simulada de autenticação
+async function authenticateUser(email, password) {
+  // Exemplo fictício: substitua com a autenticação real
+  const isAuthenticated = email === 'user@example.com' && password === 'password123';
+
+  if (isAuthenticated) {
+    // Atualizar o e-mail do usuário após a autenticação
+    document.getElementById('userEmail').textContent = email;
+  }
+
+  return isAuthenticated;
+}

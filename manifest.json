@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WideChat Agent Monitor",
-  "version": "1.0",
+  "version": "2.0",
   "description": "Desloga o agente do WideChat quando a aba ou navegador é fechado.",
   "permissions": [
     "storage",
