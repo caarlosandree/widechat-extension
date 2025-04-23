@@ -68,6 +68,66 @@ async function decrypt(cipherBase64, password) {
   }
 }
 
+// Função para validar o token
+async function validateToken(token) {
+  try {
+    const response = await fetch("https://wideintelbras.widechat.com.br/api/v4/auth/me", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 401) {
+      // Token inválido ou expirado, precisa renovar
+      return false;
+    } else if (response.ok) {
+      // Token válido
+      return true;
+    } else {
+      console.error("Erro ao validar token:", response.status);
+      return false;
+    }
+  } catch (err) {
+    console.error("Erro ao tentar validar o token:", err);
+    return false;
+  }
+}
+
+// Função para renovar o token
+async function renewToken(email, password) {
+  try {
+    const response = await fetch("https://wideintelbras.widechat.com.br/api/v4/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.token) {
+      // Armazena o novo token
+      await chrome.storage.local.set({
+        token: data.token,
+        isLoggedIn: true
+      });
+      console.log("Token renovado com sucesso.");
+      return data.token;
+    } else {
+      console.error("Erro ao renovar o token.");
+      return null;
+    }
+  } catch (err) {
+    console.error("Erro ao renovar o token:", err);
+    return null;
+  }
+}
+
 // 🧠 Lógica principal
 document.addEventListener("DOMContentLoaded", async () => {
   const loginForm = document.getElementById("loginForm"); // Formulário de login
@@ -77,17 +137,37 @@ document.addEventListener("DOMContentLoaded", async () => {
   const {
     savedEmail,
     savedPassword,
-    isLoggedIn
+    isLoggedIn,
+    token
   } = await chrome.storage.local.get([
     'savedEmail',
     'savedPassword',
-    'isLoggedIn'
+    'isLoggedIn',
+    'token'
   ]);
 
   // 🔐 Tenta descriptografar a senha, se possível
   const decryptedPassword = savedEmail && savedPassword
     ? await decrypt(savedPassword, savedEmail) // Se email e senha existirem, tenta descriptografar
     : null;
+
+  // Valida o token existente
+  if (token && !await validateToken(token)) {
+    // Se o token for inválido ou expirado, renova o token
+    if (savedEmail && decryptedPassword) {
+      const newToken = await renewToken(savedEmail, decryptedPassword);
+      if (newToken) {
+        // Atualiza o token no armazenamento local
+        await chrome.storage.local.set({ token: newToken });
+        document.getElementById("userEmail").textContent = `${savedEmail}`;
+        loginForm.style.display = "none"; // Oculta o formulário de login
+        logoutSection.style.display = "block"; // Exibe a seção de logout
+        return;
+      } else {
+        alert("Não foi possível renovar o token.");
+      }
+    }
+  }
 
   // Login para buscar o TOKEN
   if (!isLoggedIn && savedEmail && decryptedPassword) {
