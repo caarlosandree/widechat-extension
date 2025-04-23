@@ -2,14 +2,15 @@
   "manifest_version": 3,
   "name": "WideChat Agent Monitor",
   "version": "2.0",
-  "description": "Desloga o agente do WideChat quando a aba ou navegador é fechado.",
+  "description": "Desloga o agente do WideChat quando a aba ou navegador é fechado e permite configurar o domínio.",
   "permissions": [
     "storage",
     "tabs",
-    "background"
+    "background",
+    "notifications" // Adicionada a permissão para notificações
   ],
   "host_permissions": [
-    "https://*.widechat.com.br/user/agent*"
+    "https://*.widechat.com.br/*" // Permite acesso a qualquer subdomínio e qualquer caminho
   ],
   "background": {
     "service_worker": "background.js"
